@@ -5,20 +5,26 @@
 package com.mycompany.data;
 
 import com.mycompany.data.models.Stock;
+import com.mycompany.data.repositories.IStockRepository;
 import com.mycompany.data.repositories.StockListRepository;
+import java.util.List;
+
 
 /**
  *
  * @author pulkit
  */
 public class SaveData extends javax.swing.JFrame {
-    StockListRepository repo = new StockListRepository();
-    
+    IStockRepository repo = new StockListRepository();
+    List<Stock> stocks;
+    int counter = 0;
     /**
      * Creates new form SaveData
      */
     public SaveData() {
         initComponents();
+        this.setTitle("Form Application");
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -30,6 +36,7 @@ public class SaveData extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialog1 = new javax.swing.JDialog();
         id = new javax.swing.JLabel();
         name = new javax.swing.JLabel();
         price = new javax.swing.JLabel();
@@ -43,6 +50,17 @@ public class SaveData extends javax.swing.JFrame {
         nextButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,10 +104,25 @@ public class SaveData extends javax.swing.JFrame {
         });
 
         prevButton.setText("Prev <-");
+        prevButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prevButtonActionPerformed(evt);
+            }
+        });
 
         nextButton.setText("Next ->");
+        nextButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextButtonActionPerformed(evt);
+            }
+        });
 
         cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         saveButton.setText("Save");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
@@ -187,28 +220,76 @@ public class SaveData extends javax.swing.JFrame {
     }//GEN-LAST:event_idTextActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        Stock s = new Stock();
-        s.id = Integer.parseInt(idText.getText());
-        s.name = nameText.getText();
-        s.type = typeText.getText();
-        s.price = Integer.parseInt(priceText.getText());
-        repo.addStock(s);
-        
-        idText.setText("");
-        nameText.setText("");
-        priceText.setText("");
-        typeText.setText("");
+
+            Stock s = new Stock();
+            s.id = Integer.parseInt(idText.getText());
+            s.name = nameText.getText();
+            s.type = typeText.getText();
+            s.price = Integer.parseInt(priceText.getText());
+            repo.addStock(s);
+
+            idText.setText("");
+            nameText.setText("");
+            priceText.setText("");
+            typeText.setText("");
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void showButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showButtonActionPerformed
-        repo.getAllStocks().ifPresent(s->{
-            Stock temp = s.getFirst();
-            idText.setText(String.valueOf(temp.id));
+        counter = 0;        
+        repo.getAllStocks()
+                .ifPresent(s->{
+                    stocks = s;
+                    Stock temp = stocks.get(counter);
+        idText.setText(String.valueOf(temp.id));
             nameText.setText(temp.name);
             typeText.setText(temp.type);
             priceText.setText(String.valueOf(temp.price));
         });
+        
+//            System.out.println(counter);
+    for(Stock s:stocks)
+        System.out.println(s);
     }//GEN-LAST:event_showButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
+        if(counter >= stocks.size()-1)
+        {
+            nextButton.enable(false);
+            return;
+        }
+        nextButton.enable(true);
+        Stock temp = stocks.get(++counter);
+        System.out.println(stocks.get(1).id);
+        System.out.println(counter+" "+temp.id);
+        idText.setText(String.valueOf(temp.id));
+        nameText.setText(temp.name);
+        typeText.setText(temp.type);
+        priceText.setText(String.valueOf(temp.price));
+        
+
+    }//GEN-LAST:event_nextButtonActionPerformed
+
+    private void prevButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prevButtonActionPerformed
+        if(counter <= 0)
+        {
+            prevButton.enable(false);
+            System.out.println("last prev");
+            return;
+        }
+        prevButton.enable(true);
+        Stock temp = stocks.get(--counter);
+        System.out.println(counter);
+        idText.setText(String.valueOf(temp.id));
+        nameText.setText(temp.name);
+        typeText.setText(temp.type);
+        priceText.setText(String.valueOf(temp.price));
+        
+        
+    }//GEN-LAST:event_prevButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -244,11 +325,12 @@ public class SaveData extends javax.swing.JFrame {
             }
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JLabel id;
     private javax.swing.JTextField idText;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel name;
     private javax.swing.JTextField nameText;
     private javax.swing.JButton nextButton;

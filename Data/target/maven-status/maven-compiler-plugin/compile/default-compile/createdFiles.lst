@@ -1,4 +1,6 @@
+com\mycompany\data\SaveData$9.class
 com\mycompany\data\SaveData$3.class
+com\mycompany\data\SaveData$10.class
 com\mycompany\data\repositories\StockListRepository.class
 com\mycompany\data\SaveData.class
 com\mycompany\data\SaveData$2.class
@@ -9,5 +11,6 @@ com\mycompany\data\SaveData$1.class
 com\mycompany\data\models\Stock.class
 com\mycompany\data\Data.class
 com\mycompany\data\SaveData$5.class
+com\mycompany\data\SaveData$8.class
 com\mycompany\data\SaveData$4.class
 com\mycompany\data\repositories\IStockRepository.class

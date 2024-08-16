@@ -19,7 +19,7 @@ public class StockListRepository implements IStockRepository {
        Optional.ofNullable(s).ifPresent(p->{
            stocks.add(p);
        });
-        stocks.add(s);
+       
     }
     @Override
     public void modifyStock(int id, Stock newStock){
